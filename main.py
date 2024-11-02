@@ -1,4 +1,4 @@
-from hash import TextGenerator
+from generator import TextGenerator
 import os
 import shutil
 
