@@ -1,9 +1,9 @@
-from hash import TextAnonymizer
+from hash import TextGenerator
 import os
 import shutil
 
 # Create the text hasher object.
-anonymizer = TextAnonymizer()
+generator = TextGenerator()
 
 def hashed_xml_content(content: str) -> str:
     # Get the substring in the xml file that has sensitive data.
@@ -21,7 +21,8 @@ def hashed_xml_content(content: str) -> str:
 
     # Extract substring and replace it.
     substring = content[start_index:end_index]
-    h_content = content[:start_index] + anonymizer.anonymize_text(substring) + content[end_index:]
+    replacement_text = generator.random_text(len(substring), with_paragraphs=False)
+    h_content = content[:start_index] + replacement_text + content[end_index:]
     return h_content
 
 def hash_folder(source_folder: str, destination_folder: str):
@@ -50,7 +51,7 @@ def hash_folder(source_folder: str, destination_folder: str):
             if file_extension == '.xml':
                 destination_file.write(hashed_xml_content(content))
             elif file_extension == '.txt':
-                destination_file.write(anonymizer.anonymize_text(content))
+                destination_file.write(generator.random_text(len(content), with_paragraphs=True))
             else:
                 raise Exception(f'File is not .txt or .xml: {source_file_path}')
 
