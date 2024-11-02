@@ -21,23 +21,17 @@ class TextHasher:
                     # Add word to this list.
                     self.english_words_of_length[var_length].append(word)
 
-        self.map: dict[str, str] = {}
-
     def _hashed_word(self, word: str) -> str:
         if len(word) == 0:
             return word
-        if word not in self.map:
-            # Choose a random word of similar length.
-            # We might encounter words that are too long and don't have a bucket.
-            # In that case, map them to a random word.
-            length = len(word)
-            if length not in self.english_words_of_length.keys():
-                self.map[word] = random.choice(self.all_english_words)
-            else:
-                self.map[word] = random.choice(self.english_words_of_length[length])
-
-
-        return self.map[word]
+        # Choose a random word of similar length.
+        # We might encounter words that are too long and don't have a bucket.
+        # In that case, map them to a random word.
+        length = len(word)
+        if length not in self.english_words_of_length.keys():
+            return random.choice(self.all_english_words)
+        else:
+            return random.choice(self.english_words_of_length[length])
 
     def hashed_text(self, text: str) -> str:
         # Go through the string. Add separators to the hashed text as they are.
