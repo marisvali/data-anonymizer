@@ -1,6 +1,9 @@
-from hash import hashed_text
+from hash import TextHasher
 import os
 import shutil
+
+# Create the text hasher object.
+hasher = TextHasher()
 
 def hashed_xml_content(content: str) -> str:
     # Get the substring in the xml file that has sensitive data.
@@ -18,7 +21,7 @@ def hashed_xml_content(content: str) -> str:
 
     # Extract substring and replace it.
     substring = content[start_index:end_index]
-    h_content = content[:start_index] + hashed_text(substring) + content[end_index:]
+    h_content = content[:start_index] + hasher.hashed_text(substring) + content[end_index:]
     return h_content
 
 def hash_folder(source_folder: str, destination_folder: str):
@@ -47,7 +50,7 @@ def hash_folder(source_folder: str, destination_folder: str):
             if file_extension == '.xml':
                 destination_file.write(hashed_xml_content(content))
             elif file_extension == '.txt':
-                destination_file.write(hashed_text(content))
+                destination_file.write(hasher.hashed_text(content))
             else:
                 raise Exception(f'File is not .txt or .xml: {source_file_path}')
 
