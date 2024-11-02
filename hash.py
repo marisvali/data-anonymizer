@@ -31,6 +31,7 @@ class TextAnonymizer:
         # in the encoded text, the encoded text can theoretically be decoded by someone patient
         # enough.
         # We consider any non-letter to be a separator.
+        # Digits are replaced with random digits.
         h_text = ""
         word = ""
         for c in text:
@@ -43,7 +44,10 @@ class TextAnonymizer:
                 if len(word) > 0:
                     h_text += self._random_word()
                 # Add the separator to the hashed text.
-                h_text += c
+                if c.isdigit():
+                    h_text += random.choice(string.digits)
+                else:
+                    h_text += c
                 # Now, reset the word and let it build up until the next separator.
                 word = ""
         # If the text didn't end with a separator, we might still have a word.
@@ -55,7 +59,7 @@ class TextAnonymizer:
 if __name__ == "__main__":
     anonymizer = TextAnonymizer()
     result = anonymizer.anonymize_text(
-        "Am pierdut o batistuta, ma bate mamica.\n"
+        "Am pierdut o batistuta, ma bate mamica, 123.\n"
         "And I will strike down upon thee with great vengeance and furious\n"
         "Anger those who attempt to poison and destroy my brothers.\n"
         "And you will know My name is the Lord when I lay my vengeance upon thee!")
